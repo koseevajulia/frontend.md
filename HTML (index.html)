@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Currency Converter</h1>
+        <div class="converter">
+            <input type="text" id="input-amount" placeholder="Enter amount (e.g., 15 USD in RUB)">
+            <button id="convert-button">Convert</button>
+            <div id="result"></div>
+        </div>
+        <div class="rates">
+            <h2>Current Rates</h2>
+            <table id="rates-table"></table>
+        </div>
+    </div>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
