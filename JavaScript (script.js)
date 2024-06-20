@@ -1,0 +1,56 @@
+const inputAmount = document.getElementById("input-amount");
+const convertButton = document.getElementById("convert-button");
+const result = document.getElementById("result");
+const ratesTable = document.getElementById("rates-table");
+
+const apiEndpoint = "https://api.exchangerate-api.com/v4/latest/";
+let baseCurrency = "USD"; // Default base currency
+
+// Function to fetch exchange rates from the API
+async function fetchExchangeRates() {
+    const response = await fetch(`${apiEndpoint}${baseCurrency}`);
+    const data = await response.json();
+    return data.rates;
+}
+
+// Function to convert currency
+async function convertCurrency() {
+    const inputText = inputAmount.value.trim();
+    const regex = /(\d+) ([A-Z]{3}) in ([A-Z]{3})/;
+    const match = inputText.match(regex);
+
+    if (match) {
+        const amount = parseFloat(match[1]);
+        const fromCurrency = match[2];
+        const toCurrency = match[3];
+
+        const rates = await fetchExchangeRates();
+        const convertedAmount = (amount * rates[toCurrency] / rates[fromCurrency]).toFixed(2);
+        result.textContent = `${amount} ${fromCurrency} is equal to ${convertedAmount} ${toCurrency}`;
+    } else {
+        result.textContent = "Invalid input format. Please enter amount, from currency and to currency (e.g., 15 USD in RUB)";
+    }
+}
+
+// Function to display rates table
+async function displayRates() {
+    const rates = await fetchExchangeRates();
+    ratesTable.innerHTML = `
+        <tr>
+            <th>Currency</th>
+            <th>Rate</th>
+        </tr>
+    `;
+
+    for (const currency in rates) {
+        const rate = rates[currency].toFixed(2);
+        ratesTable.innerHTML += `
+            <tr>
+                <td>${currency}</td>
+                <td>${rate} ${baseCurrency}</td>
+            </tr>
+        `;
+    }
+}
+
+displayRates();
